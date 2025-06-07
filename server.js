@@ -63,6 +63,23 @@ app.post('/products',async(req,res)=> {
    }     
 
 })
+
+/// Route to delete a product by ID
+app.delete('/products/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id); 
+
+    if (!product) {
+      return res.status(404).json({ message: `Cannot find any product with id ${id}` });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message }); // Fixed JSON structure here too
+  }
+});
+
 mongoose.connect('mongodb+srv://NPM:NPM%40%40%40200314c@clusterngonie.lhmjsiu.mongodb.net/NodeAPI?retryWrites=true&w=majority&appName=ClusterNgonie')
   .then(() => {
     app.listen(port, () => {
